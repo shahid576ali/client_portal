@@ -27,10 +27,6 @@ function App() {
             <Routes>
               <Route path="/" element={<Hero />} />
               <Route path="/login" element={<Login />} />
-<<<<<<< HEAD
-              {/* <Route path="/register" element={<Register />} /> */}
-=======
->>>>>>> 9fcb7610317abcd49fef7153fee22c7c1f584d51
               <Route path="/profile" element={<Profile />} />
               {/* <Route path="/profile" element={<Activity />} /> */}
               <Route path="/*" element={<PageNotFound />} />
