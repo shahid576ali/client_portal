@@ -1,0 +1,30 @@
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar-container {
+    transition: width 0.3s ease-in-out;
+}
+
+.main-content {
+    flex-grow: 1;
+    transition: 0.3s ease-in-out;
+    margin-left: 4rem;
+}
+
+.main-content.shifted {
+    margin-left: 15rem;
+}
+
+.navbar {
+    position: fixed;
+    width: calc(100% - 4rem);
+    left: 4rem;
+    transition: left 0.3s ease-in-out;
+}
+
+.main-content.shifted .navbar {
+    width: calc(100% - 15rem);
+    left: 15rem;
+}
