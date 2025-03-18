@@ -11,7 +11,6 @@ import PageNotFound from "./Pages/NotFound/PageNotFound";
 import Activity from "./Pages/Activity/Activity";
 import Uploadjournal from "./Pages/Uploadjournal";
 import DailyJournal from "./Pages/DailyJournal/Dailyjournal";
-import NotificationsPage from "./components/Navbar/NotificationsPage";
 // import DailyJournal from "./Pages/DailyJournal/Dailyjournal";
 
 function App() {
@@ -37,30 +36,6 @@ function App() {
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
-  const notifications = [
-    {
-      id: 1,
-      message: "New message from John Doe",
-      link: "/messages",
-      time: "2 min ago",
-      read: false,
-    },
-    {
-      id: 2,
-      message: "Your profile was viewed",
-      link: "/profile",
-      time: "10 min ago",
-      read: true,
-    },
-    {
-      id: 3,
-      message: "Reminder: Meeting at 3 PM",
-      link: "/meetings",
-      time: "1 hour ago",
-      read: false,
-    },
-    // { id: 4, message: "Project deadline tomorrow", link: "/projects", time: "3 hours ago", read: false },
-  ];
 
   return (
     <BrowserRouter>
@@ -89,7 +64,6 @@ function App() {
             closeSidebar={closeSidebar}
             isSidebarOpen={isSidebarOpen}
             isMobile={isMobile}
-            notifications={notifications}
           />
 
           <main className="content-area">
@@ -101,10 +75,6 @@ function App() {
               <Route path="/journal" element={<Uploadjournal />} />
               <Route path="/*" element={<PageNotFound />} />
               <Route path="/dailyjournal" element={<DailyJournal />} />
-              <Route
-                path="/notifications"
-                element={<NotificationsPage notifications={notifications} />}
-              />
             </Routes>
           </main>
         </div>

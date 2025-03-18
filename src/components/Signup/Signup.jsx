@@ -6,7 +6,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
-  const steps = ["Personal Info", "Contact Info", "Academic Qualifications"];
+  const steps = ["Personal Info", "Contact Info", "Set Password"];
 
   return (
     <motion.div 
@@ -32,26 +32,18 @@ const Signup = () => {
           <div className="space-y-4">
             {step === 1 && (
               <>
-                <input type="text" placeholder="First Name" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="email" placeholder="Last Name" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="text" placeholder="Email Address" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="password" placeholder="Phone No." className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="text" placeholder="Full Name" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="email" placeholder="Email Address" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="text" placeholder="Username" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="password" placeholder="Password" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </>
             )}
             {step === 2 && (
               <>
                 <input type="text" placeholder="City" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 <input type="text" placeholder="State" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="tel" placeholder="Address" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="tel" placeholder="Phone Number (With Country Code)" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 <input type="text" placeholder="Postal Code" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </>
-            )}
-            {step === 3 && (
-              <>
-                <input type="text" placeholder="Education Details" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="text" placeholder="Organisation" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="tel" placeholder="Course" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="text" placeholder="Applied For" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
               </>
             )}
           </div>
@@ -67,7 +59,7 @@ const Signup = () => {
             {step < steps.length ? (
               <button 
                 onClick={() => setStep(step + 1)} 
-                className="bg-[#274C77] text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-[#4b7d9a] ml-auto"
+                className="bg-[#6096BA] text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-[#4b7d9a] ml-auto"
               >Next</button>
             ) : (
               <button className="bg-green-500 text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-green-600 ml-auto">Register</button>
@@ -81,7 +73,7 @@ const Signup = () => {
           animate={{ x: "0%" }} 
           exit={{ x: "100%" }}
           transition={{ duration: 0.6 }}
-          className="w-1/2 bg-[#274C77] text-white flex flex-col items-start justify-between px-12 py-16 rounded-r-2xl"
+          className="w-1/2 bg-[#6096BA] text-white flex flex-col items-start justify-between px-12 py-16 rounded-r-2xl"
         >
           <h2 className="text-3xl font-bold mb-4">Registration Steps</h2>
           <div className="w-full space-y-4 mb-6">

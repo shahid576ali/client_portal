@@ -1,144 +1,117 @@
-import { React, useState, useEffect } from "react";
+import React from "react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { useNavigate } from "react-router-dom";
-import DailyJournal from "./DailyJournal/Dailyjournal";
+
+const data = [
+  { id: "JRN - 76010", date: "12/03/2025", status: "approved", learnings: "Improved API handling, Error debugging", rating: 5, leaderRemarks: "Great progress" },
+  { id: "JRN - 76011", date: "11/03/2025", status: "approved", learnings: "Learned about Redux, State management", rating: 4, leaderRemarks: "Good effort" },
+  { id: "JRN - 76012", date: "10/03/2025", status: "disapproved", learnings: "Missed deadline, Incomplete documentation", rating: 2, leaderRemarks: "Needs improvement" },
+  { id: "JRN - 76013", date: "09/03/2025", status: "approved", learnings: "Implemented authentication, Security fixes", rating: 5, leaderRemarks: "Excellent" },
+  { id: "JRN - 76014", date: "08/03/2025", status: "approved", learnings: "Performance optimization, Code refactoring", rating: 5, leaderRemarks: "Well done" },
+];
+
+const chartData = [
+  { month: "Jan", journals: 50 },
+  { month: "Feb", journals: 65 },
+  { month: "Mar", journals: 60 },
+  { month: "Apr", journals: 75 },
+  { month: "May", journals: 70 },
+];
+
+const pieData = [
+  { name: "Approved", value: 4 },
+  { name: "Disapproved", value: 1 },
+  { name: "Pending", value: 2 },
+];
+
+const COLORS = ["#4A90E2", "#1E3A8A", "#A6C1EE"];
 
 const UploadJournal = () => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [entriesPerPage, setEntriesPerPage] = useState(10);
-  const [filterStatus, setFilterStatus] = useState("");
-
-  useEffect(() => {
-    const updateEntriesPerPage = () => {
-      const viewportHeight = window.innerHeight;
-      const estimatedRows = Math.floor((viewportHeight - 200) / 40);
-      setEntriesPerPage(Math.max(5, estimatedRows));
-    };
-    updateEntriesPerPage();
-    window.addEventListener("resize", updateEntriesPerPage);
-    return () => window.removeEventListener("resize", updateEntriesPerPage);
-  }, []);
-
-  const data = Array.from({ length: 50 }, (_, i) => ({
-    id: `JRN - 75${100 + i}`,
-    date: `0${(i % 9) + 1}/02/2025`,
-    status: i % 3 === 0 ? "disapproved" : "approved",
-    report: "N/A",
-    learnings: `Learning session ${i + 1}, Communication, Leadership`,
-    pendings: "NA",
-    rating: Math.floor(Math.random() * 5) + 1,
-    leaderRemarks: i % 2 === 0 ? "Excellent" : "Needs Improvement",
-  }));
-
-  const filteredData = data.filter((entry) =>
-    Object.values(entry).some((val) =>
-      String(val).toLowerCase().includes(searchTerm.toLowerCase())
-    ) && (filterStatus ? entry.status === filterStatus : true)
-  );
-
-  const sortedData = [...filteredData].sort((a, b) => {
-    if (!sortBy) return 0;
-    const valueA = a[sortBy];
-    const valueB = b[sortBy];
-    if (typeof valueA === "string") {
-      return sortOrder === "asc" ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    }
-    return sortOrder === "asc" ? valueA - valueB : valueB - valueA;
-  });
-
-  const totalPages = Math.ceil(sortedData.length / entriesPerPage);
-  const indexOfLastEntry = currentPage * entriesPerPage;
-  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
-  const currentEntries = sortedData.slice(indexOfFirstEntry, indexOfLastEntry);
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen w-full">
-      <div className="overflow-auto bg-white shadow-lg rounded-lg p-4">
-        <div className="flex flex-col md:flex-row md:justify-between items-center mb-4 gap-4">
-          <h2 className="text-xl md:text-2xl font-semibold text-gray-800">Journal Entries</h2>
-          <div className="flex flex-wrap gap-3 items-center">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="border p-2 rounded-lg text-gray-700 w-full md:w-auto"
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={() => setFilterStatus("approved")}
-                className={`px-4 py-2 rounded-lg text-white font-semibold transition ${filterStatus === "approved" ? "bg-green-700" : "bg-green-500 hover:bg-green-600"}`}
-              >
-                Approved
-              </button>
-              <button
-                onClick={() => setFilterStatus("disapproved")}
-                className={`px-4 py-2 rounded-lg text-white font-semibold transition ${filterStatus === "disapproved" ? "bg-red-700" : "bg-red-500 hover:bg-red-600"}`}
-              >
-                Disapproved
-              </button>
-              <button
-                onClick={() => setFilterStatus("")}
-                className="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400 text-black font-semibold"
-              >
-                Reset
-              </button>
-            </div>
-            <select
-              className="border p-2 rounded-lg text-gray-700 w-full md:w-auto"
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="">Sort By</option>
-              <option value="date">DOA</option>
-              <option value="status">Status</option>
-              <option value="rating">Rating</option>
-            </select>
-            <button
-              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              className="bg-gray-300 hover:bg-gray-400 text-black px-3 py-2 rounded-lg"
-            >
-              {sortOrder === "asc" ? "↑ Asc" : "↓ Desc"}
-            </button>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-[#6096BA] hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
-            >
-              Upload Journal
-            </button>
-          </div>
+    <div className="p-6 bg-gray-100 min-h-screen w-full">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-700">Dashboard</h2>
+        <button
+          onClick={() => navigate("/dailyjournal")}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md mt-3 sm:mt-0"
+        >
+          Upload Daily Journal
+        </button>
+      </div>
+
+      {/* Top Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="bg-blue-500 text-white p-4 rounded-lg shadow-md text-center text-lg font-bold">Weekly Report: 24</div>
+        <div className="bg-blue-400 text-white p-4 rounded-lg shadow-md text-center text-lg font-bold">Daily Journal: 7</div>
+        <div className="bg-blue-300 text-white p-4 rounded-lg shadow-md text-center text-lg font-bold">Leaves: 12</div>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Line Chart */}
+        <div className="bg-white p-4 shadow-md rounded-lg">
+          <h3 className="text-lg font-bold mb-4">Daily Trends</h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={chartData}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="journals" stroke="#4A90E2" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
 
-        <table className="min-w-full text-sm text-gray-800 border-collapse border border-gray-300">
+        {/* Pie Chart */}
+        <div className="bg-white p-4 shadow-md rounded-lg">
+          <h3 className="text-lg font-bold mb-4">Journal Status</h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} fill="#4A90E2" dataKey="value">
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <div className="mt-6 bg-white p-4 shadow-md rounded-lg overflow-x-auto">
+        <h3 className="text-lg font-bold mb-4">Journal Entries</h3>
+        <table className="w-full border-collapse border border-gray-200 text-sm md:text-base">
           <thead>
-            <tr className="bg-[#E7ECEF] text-left">
-              <th className="border p-3">Journal ID</th>
-              <th className="border p-3">DOA</th>
-              <th className="border p-3">Status</th>
-              <th className="border p-3">Report</th>
-              <th className="border p-3">Learnings</th>
-              <th className="border p-3">Pendings</th>
-              <th className="border p-3">Rating</th>
-              <th className="border p-3">Leader Remarks</th>
+            <tr className="bg-gray-100">
+              <th className="border p-2">Journal ID</th>
+              <th className="border p-2">Date</th>
+              <th className="border p-2">Status</th>
+              <th className="border p-2">Learnings</th>
+              <th className="border p-2">Rating</th>
+              <th className="border p-2">Leader Remarks</th>
             </tr>
           </thead>
           <tbody>
-            {currentEntries.map((entry) => (
-              <tr key={entry.id} className="hover:bg-gray-100 transition">
-                <td className="border p-3 truncate">{entry.id}</td>
-                <td className="border p-3">{entry.date}</td>
-                <td className="border p-3">
-                  <span className={`px-4 py-1 text-white rounded-lg text-sm font-semibold ${entry.status === "approved" ? "bg-green-500" : "bg-red-500"}`}>
-                    {entry.status}
-                  </span>
-                </td>
-                <td className="border p-3 truncate">{entry.report}</td>
-                <td className="border p-3 truncate">{entry.learnings}</td>
-                <td className="border p-3">{entry.pendings}</td>
-                <td className="border p-3">{entry.rating}</td>
-                <td className="border p-3 truncate">{entry.leaderRemarks}</td>
+            {data.map((entry) => (
+              <tr key={entry.id} className="text-center">
+                <td className="border p-2">{entry.id}</td>
+                <td className="border p-2">{entry.date}</td>
+                <td className={`border p-2 font-bold ${entry.status === "approved" ? "text-green-500" : "text-red-500"}`}>{entry.status}</td>
+                <td className="border p-2">{entry.learnings}</td>
+                <td className="border p-2">{entry.rating}</td>
+                <td className="border p-2">{entry.leaderRemarks}</td>
               </tr>
             ))}
           </tbody>
