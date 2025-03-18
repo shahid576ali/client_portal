@@ -17,8 +17,8 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
   const notifications = [
     { id: 1, message: "New message from John Doe", link: "/messages", time: "2 min ago", read: false },
     { id: 2, message: "Your profile was viewed", link: "/profile", time: "10 min ago", read: true },
-    // { id: 3, message: "Reminder: Meeting at 3 PM", link: "/meetings", time: "1 hour ago", read: false },
-    { id: 4, message: "Project deadline tomorrow", link: "/projects", time: "3 hours ago", read: false },
+    { id: 3, message: "Reminder: Meeting at 3 PM", link: "/meetings", time: "1 hour ago", read: false },
+    // { id: 4, message: "Project deadline tomorrow", link: "/projects", time: "3 hours ago", read: false },
   ];
 
   useEffect(() => {
@@ -100,16 +100,14 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
                       <Link
                         key={notif.id}
                         to={notif.link}
-                        className={`flex items-start gap-3 p-3 rounded-md hover:bg-gray-100 transition duration-200 ${
-                          !notif.read ? "bg-gray-50" : ""
-                        }`}
+                        className={`flex items-start gap-3 p-3 rounded-md hover:bg-gray-100 transition duration-200 ${!notif.read ? "bg-gray-50" : ""
+                          }`}
                       >
                         <div className="relative">
                           <CheckCircle
                             size={16}
-                            className={`absolute -top-1 -right-1 ${
-                              notif.read ? "text-green-500" : "text-gray-300"
-                            }`}
+                            className={`absolute top-2 -right-1 ${notif.read ? "text-green-500" : "text-gray-300"
+                              }`}
                           />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -125,8 +123,10 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
                   )}
                 </div>
 
-                <button className="w-full text-center mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
-                  View All
+                <button onClick={() => {setIsNotificationOpen(false); // Close dropdown
+                  }}
+                className="w-full text-center mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
+                  <Link to="/notifications">View All</Link>
                 </button>
               </div>
             )}

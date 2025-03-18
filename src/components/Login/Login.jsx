@@ -26,7 +26,7 @@ const Login = () => {
           <p className="mt-2">Don't have an account?</p>
           <button
             onClick={() => navigate("/signup")}
-            className="mt-4 border-2 border-white px-6 py-2 rounded-lg hover:bg-white hover:text-blue-500 transition"
+            className="mt-4 border-2 border-white px-6 py-2 rounded-lg cursor-pointer hover:bg-white hover:text-blue-500 transition"
           >
             Register
           </button>
@@ -64,7 +64,7 @@ const Login = () => {
           </p>
 
           {/* Login Button */}
-          <button className="w-full bg-[#274C77] text-white py-3 rounded-lg text-lg font-semibold hover:bg-offwhite-600 transition mt-6">
+          <button className="w-full bg-[#274C77] text-white py-3 rounded-lg cursor-pointer text-lg font-semibold hover:bg-offwhite-600 transition mt-6">
             Login
           </button>
         </div>

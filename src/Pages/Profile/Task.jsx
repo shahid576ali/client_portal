@@ -1,6 +1,16 @@
 import "react";
+import { useNavigate } from "react-router-dom";
 
 const Task = () => {
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/new-page"); // Replace "/new-page" with your target route
+  };
+
+
+
   const profile = [
     {
       id: '16442',
@@ -76,7 +86,9 @@ const Task = () => {
     <div className="flex flex-col shadow-lg items-center p-2 max-w-full rounded-[8px]">
       <div className="flex justify-between w-full items-center mb-4">
         <h2 className="text-lg font-bold">User Table</h2>
-        <button className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 rounded-lg">Add Task</button>
+        <button className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 ml-125 rounded-lg">Add Task</button>
+        {/* <button className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 rounded-lg">All Task</button> */}
+        <button onClick={handleClick} className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 rounded-lg">All Task</button>
       </div>
       <table className="border-collapse max-w-full bg-white border border-gray-300">
         <thead>
