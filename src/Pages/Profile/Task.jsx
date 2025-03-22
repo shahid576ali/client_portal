@@ -1,62 +1,134 @@
+
 import "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Task = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5;
 
-  const handleClick = () => {
-    navigate("/new-page"); // Replace "/new-page" with your target route
+  const handleNext = () => {
+    if ((currentPage + 1) * itemsPerPage < tasks.length) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
+  const handlePrev = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
+  
 
-  const profile = [
+  const tasks = [
     {
-      id: '16442',
-      name: 'Uzma Hassan',
-      email: 'uzmahassan202@gmail.com',
-      phone: '8491962122',
-      registeredUsers: 'Registered Users',
-      progressive: 'Progressive',
-      signedUp: 'Signed Up',
-      notes: 'NA',
-      tasks: 'NA',
+      id: "TSK-7479",
+      date: "2023/03/06",
+      name: "Client Portal",
+      status: "Ongoing",
+      deadline: "2023/03/10",
+      assignedBy: "Self",
     },
     {
-      id: '16441',
-      name: 'Sharath Gajula',
-      email: '23955a0523@iare.ac.in',
-      phone: '7816032830',
-      registeredUsers: 'Registered Users',
-      progressive: 'Progressive',
-      signedUp: 'Signed Up',
-      notes: 'NA',
-      tasks: 'NA',
+      id: "TSK-7480",
+      date: "2023/03/07",
+      name: "Dashboard Update",
+      status: "Completed",
+      deadline: "2023/03/15",
+      assignedBy: "Manager",
     },
     {
-      id: '16440',
-      name: 'Alice Johnson',
-      email: 'alice.johnson@example.com',
-      phone: '9876543210',
-      registeredUsers: 'Registered Users',
-      progressive: 'Progressive',
-      signedUp: 'Signed Up',
-      notes: 'NA',
-      tasks: 'NA',
+      id: "TSK-7481",
+      date: "2023/02/10",
+      name: "API Development",
+      status: "Completed",
+      deadline: "2023/02/20",
+      assignedBy: "Team Leader",
     },
     {
-      id: '16439',
-      name: 'Bob Williams',
-      email: 'bob.williams@example.com',
-      phone: '1234567890',
-      registeredUsers: 'Registered Users',
-      progressive: 'Progressive',
-      signedUp: 'Signed Up',
-      notes: 'NA',
-      tasks: 'NA',
+      id: "TSK-7482",
+      date: "2023/04/10",
+      name: "Responsiveness",
+      status: "Ongoing",
+      deadline: "2023/04/15",
+      assignedBy: "Team Member",
     },
+    {
+      id: "TSK-7483",
+      date: "2023/04/23",
+      name: "React router setup",
+      status: "Completed",
+      deadline: "2023/04/27",
+      assignedBy: "Self",
+    },
+    {
+      id: "TSK-7484",
+      date: "2023/03/25",
+      name: "Redux setup",
+      status: "Completed",
+      deadline: "2023/03/30",
+      assignedBy: "Team Leader",
+    },
+    {
+      id: "TSK-7484",
+      date: "2023/03/25",
+      name: "Redux setup",
+      status: "Completed",
+      deadline: "2023/03/30",
+      assignedBy: "Team Leader",
+    },
+    {
+      id: "TSK-7484",
+      date: "2023/03/25",
+      name: "Redux setup",
+      status: "Completed",
+      deadline: "2023/03/30",
+      assignedBy: "Team Leader",
+    },
+    {
+      id: "TSK-7484",
+      date: "2023/03/25",
+      name: "Redux setup",
+      status: "Completed",
+      deadline: "2023/03/30",
+      assignedBy: "Team Leader",
+    },
+    {
+      id: "TSK-7484",
+      date: "2023/03/25",
+      name: "Redux setup",
+      status: "Completed",
+      deadline: "2023/03/30",
+      assignedBy: "Team Leader",
+    }
   ];
+
+  const displayedTasks = tasks.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  const sortedTasks = [...tasks].sort((a, b) => {
+    return sortOrder === "asc"
+      ? new Date(a.date) - new Date(b.date)
+      : new Date(b.date) - new Date(a.date);
+  });
+
+  const filteredTasks = sortedTasks.filter(
+    (task) =>
+      task.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filter === "all" || task.status.toLowerCase() === filter)
+  );
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
 
   const activities = [
     {
@@ -64,67 +136,105 @@ const Task = () => {
       action: 'last login on',
       date: 'Jul 13, 2024',
       time: '05:36 PM',
-      imageUrl: 'https://via.placeholder.com/40/007bff/FFFFFF?text=JM',
+      imageUrl: 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg?semt=ais_hybrid',
     },
     {
       name: 'Merva Sahin',
       action: 'date created on',
       date: 'Sep 08, 2024',
       time: '03:12 PM',
-      imageUrl: 'https://via.placeholder.com/40/ffc107/FFFFFF?text=MS',
+      imageUrl: 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg',
     },
     {
       name: 'Tammy Collier',
       action: 'updated on',
       date: 'Aug 15, 2023',
       time: '05:36 PM',
-      imageUrl: 'https://via.placeholder.com/40/28a745/FFFFFF?text=TC',
+      imageUrl: 'https://img.freepik.com/premium-vector/business-global-economy_24877-41082.jpg',
     },
+    {
+      name: 'Jasper Jean',
+      action: 'logged out at',
+      date: 'July 15, 2023',
+      time: '04:36 AM',
+      imageUrl: 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg?semt=ais_hybrid',
+    },
+    {
+      name: 'Shiny Dutta',
+      action: 'created on',
+      date: 'Feb 20, 2024',
+      time: '03:40 PM',
+      imageUrl: 'https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg',
+    }
   ];
 
   return (
-    <div className="flex flex-col shadow-lg items-center p-2 max-w-full rounded-[8px]">
-      <div className="flex justify-between w-full items-center mb-4">
-        <h2 className="text-lg font-bold">User Table</h2>
-        <button className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 ml-125 rounded-lg">Add Task</button>
-        {/* <button className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 rounded-lg">All Task</button> */}
-        <button onClick={handleClick} className="bg-[#274C77] hover:bg-[#253446] cursor-pointer text-white px-4 py-2 rounded-lg">All Task</button>
+    <div className="p-4 flex flex-col gap-6 w-full">
+
+<div className="bg-white shadow-lg rounded-lg p-4 w-full overflow-x-auto">
+      <h2 className="text-lg font-semibold mb-4">User Data</h2>
+      <div className="flex flex-col md:flex-row gap-4 mb-4">
+        <button className="bg-[#2f9ce4] text-white px-4 py-2 rounded w-full md:w-auto cursor-pointer">
+          Add Task
+        </button>
+        <Link to='/tasks' className="bg-[#2f9ce4] text-white text-center px-4 py-2 rounded w-full md:w-auto cursor-pointer">
+          All Tasks
+        </Link>
       </div>
-      <table className="border-collapse max-w-full bg-white border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100 text-gray-800">
-            {['ID', 'Name', 'Email', 'Phone', 'RegisteredUsers', 'Progressive', 'SignedUp', 'Notes', 'Tasks'].map((header) => (
-              <th key={header} className="border border-gray-300 text-[14px] p-2 text-center w-auto">{header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {profile.map((user) => (
-            <tr key={user.id} className="text-[12px] text-gray-600 even:bg-[#E7ECEF]">
-              <td className="border border-gray-300 p-2">{user.id}</td>
-              <td className="border border-gray-300 p-2">{user.name}</td>
-              <td className="border border-gray-300 p-2">{user.email}</td>
-              <td className="border border-gray-300 p-2">{user.phone}</td>
-              <td className="border border-gray-300 p-2">{user.registeredUsers}</td>
-              <td className="border border-gray-300 p-2">{user.progressive}</td>
-              <td className="border border-gray-300 p-2">{user.signedUp}</td>
-              <td className="border border-gray-300 p-2">{user.notes}</td>
-              <td className="border border-gray-300 p-2">{user.tasks}</td>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-200 text-sm md:text-base">
+          <thead className="text-[16px]">
+            <tr className="bg-gray-100 text-gray-700">
+              <th className="px-2 md:px-4 py-2 text-left">Task ID</th>
+              <th className="px-2 md:px-4 py-2 text-left">Task Date</th>
+              <th className="px-2 md:px-4 py-2 text-left">Task Name</th>
+              <th className="px-2 md:px-4 py-2 text-left">Status</th>
+              <th className="px-2 md:px-4 py-2 text-left">Actions</th>
+              <th className="px-2 md:px-4 py-2 text-left">Deadline</th>
+              <th className="px-2 md:px-4 py-2 text-left">Assigned By</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {displayedTasks.map((task, index) => (
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
+                <td className="px-2 md:px-4 py-2">{task.id}</td>
+                <td className="px-2 md:px-4 py-2">{task.date}</td>
+                <td className="px-2 md:px-4 py-2 text-blue-500 cursor-pointer">{task.name}</td>
+                <td className="px-2 md:px-4 py-2">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${task.status === "Ongoing" ? "bg-yellow-100 text-yellow-800 border border-yellow-400" : "bg-green-100 text-green-800 border border-green-400"}`}>
+                    {task.status}
+                  </span>
+                </td>
+                <td className="px-2 md:px-4 py-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <FaEye className="text-green-500 cursor-pointer text-lg" />
+                    <FaEdit className="text-blue-500 cursor-pointer text-lg" />
+                    <FaTrash className="text-red-500 cursor-pointer text-lg" />
+                  </div>
+                </td>
+                <td className="px-2 md:px-4 py-2">{task.deadline}</td>
+                <td className="px-2 md:px-4 py-2">{task.assignedBy}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex justify-between mt-4">
+        <button onClick={handlePrev} disabled={currentPage === 0} className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50">
+          Previous
+        </button>
+        <button onClick={handleNext} disabled={(currentPage + 1) * itemsPerPage >= tasks.length} className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50">
+          Next
+        </button>
+      </div>
+    </div>
 
       {/* Activity Section */}
-      <div className="bg-white rounded-xl mt-2 p-5 w-full">
+      <div className="bg-white shadow-2xl rounded-xl mt-2 p-5 w-full">
         <h2 className="text-lg font-semibold mb-4">Activity</h2>
         {activities.map((activity, index) => (
           <div key={index} className="flex items-center mb-3">
-            <img
-              src={activity.imageUrl}
-              alt={`${activity.name} profile`}
-              className="w-10 h-10 rounded-full mr-3"
-            />
+            <img src={activity.imageUrl} alt={`${activity.name} profile`} className="w-10 h-10 rounded-full mr-3" />
             <div>
               <div className="font-bold text-gray-700">{activity.name} {activity.action} {activity.date}</div>
               <div className="text-sm text-gray-500">{activity.time}</div>

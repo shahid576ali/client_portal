@@ -1,39 +1,43 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { MessagesSquare, Bell, UserCircle, Menu, X, CheckCircle } from "lucide-react";
+import { MessagesSquare, Bell, UserCircle, Menu, CheckCircle } from "lucide-react";
 
-const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
+const Navbar = ({ toggleSidebar }) => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isMessagesOpen, setIsMessagesOpen] = useState(false);
+  
   const profileMenuRef = useRef(null);
   const notificationMenuRef = useRef(null);
+  const messagesMenuRef = useRef(null);
 
   const user = {
     name: "Nicholas Swatz",
-    profileImage:
-      "https://globalventuring.com//content/uploads/2023/03/Sonam-Jain-landscape.png",
+    profileImage: "https://globalventuring.com//content/uploads/2023/03/Sonam-Jain-landscape.png",
   };
 
   const notifications = [
     { id: 1, message: "New message from John Doe", link: "/messages", time: "2 min ago", read: false },
     { id: 2, message: "Your profile was viewed", link: "/profile", time: "10 min ago", read: true },
     { id: 3, message: "Reminder: Meeting at 3 PM", link: "/meetings", time: "1 hour ago", read: false },
-    // { id: 4, message: "Project deadline tomorrow", link: "/projects", time: "3 hours ago", read: false },
+  ];
+
+  const messages = [
+    { id: 1, sender: "Shahid Sir", message: "Hey, how are you?", time: "2 min ago",phone:918126808243 },
+    { id: 2, sender: "Aishwarya ma'am", message: "Meeting postponed to 5 PM.", time: "15 min ago",phone:8299746136 },
+    { id: 3, sender: "Mark", message: "Let's catch up later.", time: "30 min ago" },
   ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target)
-      ) {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
         setIsProfileMenuOpen(false);
       }
-      if (
-        notificationMenuRef.current &&
-        !notificationMenuRef.current.contains(event.target)
-      ) {
+      if (notificationMenuRef.current && !notificationMenuRef.current.contains(event.target)) {
         setIsNotificationOpen(false);
+      }
+      if (messagesMenuRef.current && !messagesMenuRef.current.contains(event.target)) {
+        setIsMessagesOpen(false);
       }
     };
 
@@ -44,39 +48,73 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
   }, []);
 
   return (
-    <>
-      {/* Navbar */}
-      <nav className="bg-white shadow-md p-4 flex justify-between items-center w-full fixed top-0 left-0 z-50 md:relative">
-        {/* Left Section - Sidebar Toggle & Logo */}
-        <div className="flex items-center gap-4">
-          <button
-            onClick={toggleSidebar}
-            className="text-gray-700 focus:outline-none text-2xl md:hidden"
-          >
-            <Menu size={20} />
-          </button>
+    <nav className="bg-white shadow-md p-4 flex justify-between items-center w-full fixed top-0 left-0 z-50 md:relative">
+      <div className="flex items-center gap-4">
+        <button onClick={toggleSidebar} className="text-gray-700 focus:outline-none text-2xl md:hidden">
+          <Menu size={20} />
+        </button>
+        <Link to="/" className="flex items-center gap-2">
+          <img
+            src="https://i0.wp.com/simtrak.in/wp-content/uploads/2023/07/simtrak-removebg-preview.png?fit=300%2C95&ssl=1"
+            alt="Logo"
+            className="h-10 w-auto"
+          />
+        </Link>
+      </div>
 
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="https://i0.wp.com/simtrak.in/wp-content/uploads/2023/07/simtrak-removebg-preview.png?fit=300%2C95&ssl=1"
-              alt="Logo"
-              className="h-10 w-auto"
-            />
-          </Link>
-        </div>
+      <div className="flex items-center gap-6 relative">
 
-        {/* Icons (Visible on all screen sizes) */}
-        <div className="flex items-center gap-6 relative">
-          {/* Messages Icon */}
-          <button className="relative p-2 text-gray-700 hover:text-blue-500 cursor-pointer">
-            <MessagesSquare size={24} />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
-              3
-            </span>
-          </button>
+        {/* Messages Icon with Dropdown */}
+<div className="relative" ref={messagesMenuRef}>
+  <button
+    onClick={() => setIsMessagesOpen(!isMessagesOpen)}
+    className="relative p-2 text-gray-700 hover:text-blue-500 cursor-pointer"
+  >
+    <MessagesSquare size={24} />
+    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
+      {messages.length}
+    </span>
+  </button>
 
-          {/* Notification Icon with Dropdown */}
-          <div className="relative" ref={notificationMenuRef}>
+  {isMessagesOpen && (
+    <div className="fixed sm:absolute right-0 left-0 sm:left-auto top-16 sm:top-auto sm:mt-2 mx-2 sm:mx-0 w-auto sm:w-80 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50 max-h-[80vh] overflow-auto">
+      <h3 className="font-semibold text-gray-800 flex items-center gap-2 border-b pb-3">
+        <MessagesSquare size={18} className="text-blue-500" /> Messages
+      </h3>
+
+      <div className="max-h-60 overflow-y-auto mt-2">
+        {messages.length > 0 ? (
+          messages.map((msg) => (
+            <a
+              key={msg.id}
+              href={`https://wa.me/${msg.phone}?text=Hello ${msg.sender}, I received your message: "${msg.message}"`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-3 p-3 rounded-md hover:bg-gray-100 transition duration-200"
+            >
+              <div className="flex-1 min-w-0">
+                <p className="text-gray-700 text-sm font-medium">{msg.sender}</p>
+                <p className="text-gray-600 text-xs truncate">{msg.message}</p>
+                <span className="text-xs text-gray-500">{msg.time}</span>
+              </div>
+            </a>
+          ))
+        ) : (
+          <p className="text-gray-500 text-sm text-center mt-3">No new messages</p>
+        )}
+      </div>
+
+      <button onClick={() => setIsMessagesOpen(false)} className="w-full text-center mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200">
+        <Link to="/messages">View All</Link>
+      </button>
+    </div>
+  )}
+</div>
+
+
+
+        {/* Notification Icon with Dropdown */}
+        <div className="relative" ref={notificationMenuRef}>
             <button
               onClick={() => setIsNotificationOpen(!isNotificationOpen)}
               className="relative p-2 text-gray-700 hover:text-blue-500 cursor-pointer"
@@ -87,7 +125,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
               </span>
             </button>
 
-            {/* Notification Dropdown Menu - Fixed positioning on mobile */}
+            
             {isNotificationOpen && (
               <div className="fixed sm:absolute right-0 left-0 sm:left-auto top-16 sm:top-auto sm:mt-2 mx-2 sm:mx-0 w-auto sm:w-80 bg-white border border-gray-200 rounded-lg shadow-xl p-4 z-50 max-h-[80vh] overflow-auto">
                 <h3 className="font-semibold text-gray-800 flex items-center gap-2 border-b pb-3">
@@ -132,8 +170,8 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
             )}
           </div>
 
-          {/* Profile Icon with Dropdown */}
-          <div className="relative" ref={profileMenuRef}>
+        {/* Profile Icon with Dropdown */}
+        <div className="relative" ref={profileMenuRef}>
             <button
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
               className="focus:outline-none"
@@ -179,13 +217,54 @@ const Navbar = ({ toggleSidebar, isSidebarOpen, closeSidebar }) => {
               </div>
             )}
           </div>
-        </div>
-      </nav>
-    </>
+
+      </div>
+    </nav>
   );
 };
 
 export default Navbar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

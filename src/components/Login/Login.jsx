@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Login = () => {
@@ -24,12 +24,11 @@ const Login = () => {
         >
           <h2 className="text-3xl font-bold">Hello, Welcome!</h2>
           <p className="mt-2">Don't have an account?</p>
-          <button
-            onClick={() => navigate("/signup")}
+          <Link to="/signup"
             className="mt-4 border-2 border-white px-6 py-2 rounded-lg cursor-pointer hover:bg-white hover:text-blue-500 transition"
           >
             Register
-          </button>
+          </Link>
         </motion.div>
 
         {/* Right Side (Login Form) */}

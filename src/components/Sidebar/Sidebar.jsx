@@ -98,7 +98,7 @@ const Sidebar = ({ onToggle, isOpen, isMobile, closeSidebar }) => {
         </li>
         <li
           className={active == "logout" ? "active" : ""}
-          onClick={() => handleItemClick("/signup", "logout")}
+          onClick={() => handleItemClick("/login", "logout")}
         >
           <FaSignOutAlt />
           {(isExpanded || isMobile) && <span>Logout</span>}

@@ -92,6 +92,7 @@
   .sidebar {
     left: -250px;
     width: 250px;
+    height: 100%;
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -137,11 +138,6 @@
   .main-content {
     margin-left: 0;
   }
-
-  .main-content.shifted {
-    margin-left: 0;
-  }
-
   .main-content.mobile-shifted {
     margin-left: 0;
   }

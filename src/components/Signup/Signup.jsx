@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const Signup = () => {
@@ -93,10 +93,9 @@ const Signup = () => {
           </div>
           <p className="text-lg self-start">
             Already a user? 
-            <span 
-              onClick={() => navigate("/login")} 
+            <Link to="/login" 
               className="underline cursor-pointer hover:text-gray-200 transition"
-            > Login</span>
+            > Login</Link>
           </p>
         </motion.div>
       </div>
