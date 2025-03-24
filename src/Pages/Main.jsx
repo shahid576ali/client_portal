@@ -10,7 +10,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Navbar/Navbar";
 import NotificationsPage from "../components/Navbar/NotificationsPage";
 import AllTasks from './Profile/AllTasks';
-import WeeklyReview from "./WeeklyReview/WeeklyReviewList"
+// import WeeklyReview from "./WeeklyReview/WeeklyReviewList"
 
 
 const Main = () => {
