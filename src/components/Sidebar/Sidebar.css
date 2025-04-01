@@ -32,6 +32,7 @@
   border-radius: 12px;
 }
 .sidebar li svg {
+  flex-shrink: 0;
   font-size: 22px;
 }
 

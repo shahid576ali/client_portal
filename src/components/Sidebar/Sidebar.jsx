@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   FaHome,
   FaUsers,
@@ -61,6 +62,7 @@ const Sidebar = ({ onToggle, isOpen, isMobile, closeSidebar }) => {
           <FaUsers />
           {(isExpanded || isMobile) && <span>Profile</span>}
         </li>
+
         <li
           className={active == "daily" ? "active" : ""}
           onClick={() => handleItemClick("/journal", "daily")}
@@ -68,13 +70,15 @@ const Sidebar = ({ onToggle, isOpen, isMobile, closeSidebar }) => {
           <FaBook />
           {(isExpanded || isMobile) && <span>Daily Journal</span>}
         </li>
+
         <li
-          className={active == "weekly" ? "active" : ""}
-          onClick={() => handleItemClick("/*", "weekly")}
+          className={active === "weekly-review" ? "active" : ""}
+          onClick={() => handleItemClick("/weeklyreview", "weekly-review")}
         >
           <FaClipboardList />
           {(isExpanded || isMobile) && <span>Weekly Review</span>}
         </li>
+
         <li
           className={active == "leave" ? "active" : ""}
           onClick={() => handleItemClick("/*", "leave")}
@@ -82,6 +86,7 @@ const Sidebar = ({ onToggle, isOpen, isMobile, closeSidebar }) => {
           <FaCalendarCheck />
           {(isExpanded || isMobile) && <span>Apply Leave</span>}
         </li>
+
         <li
           className={active == "presentation" ? "active" : ""}
           onClick={() => handleItemClick("/*", "presentation")}

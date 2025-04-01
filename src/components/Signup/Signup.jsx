@@ -16,9 +16,9 @@ const Signup = () => {
       transition={{ duration: 0.6 }}
       className="flex min-h-screen items-center justify-center bg-gray-100 p-4"
     >
-      <div className="flex flex-col md:flex-row w-full max-w-4xl shadow-lg rounded-2xl overflow-hidden relative bg-white">
+      <div className="flex flex-col-reverse md:flex-row w-full max-w-4xl shadow-lg rounded-2xl overflow-hidden relative bg-white">
         {/* Left Side (Signup Form) */}
-        <div className="md:w-1/2 w-full bg-white px-6 md:px-12 py-10 md:py-12 flex flex-col justify-center rounded-t-2xl md:rounded-t-none md:rounded-l-2xl">
+        <div className="md:w-1/2 w-full bg-white px-6 md:px-12 py-10 md:py-12 flex flex-col justify-center z-10">
           {/* Logo */}
           <div className="flex justify-center mb-4">
             <img 
@@ -82,20 +82,62 @@ const Signup = () => {
           </div>
         </div>
 
-        {/* Right Side (Steps & Link) */}
+        {/* Right Side (Steps with Top Curve) */}
         <motion.div 
           initial={{ x: "100%" }} 
           animate={{ x: "0%" }} 
           exit={{ x: "100%" }}
           transition={{ duration: 0.6 }}
-          className="md:w-1/2 w-full bg-[#274C77] text-white flex flex-col items-start justify-between px-6 md:px-12 py-10 md:py-16 rounded-b-2xl md:rounded-b-none md:rounded-r-2xl"
+          className="md:w-1/2 w-full bg-[#274C77] text-white flex flex-col items-start justify-between px-6 md:px-12 py-8 md:py-16 
+          rounded-b-[40px] md:rounded-b-none
+          md:rounded-r-2xl 
+          relative z-20"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">Registration Steps</h2>
-          <div className="w-full space-y-4 mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8">Registration Steps</h2>
+          
+          {/* Mobile View: Circles with Lines */}
+          <div className="md:hidden w-full relative">
+            {/* Horizontal Line */}
+            <div className="absolute top-6 left-[25px] right-[25px] h-0.5 bg-white/30"></div>
+            
+            {/* Steps */}
+            <div className="flex justify-between items-start relative">
+              {steps.map((s, index) => (
+                <div key={index} className="flex flex-col items-center relative">
+                  {/* Circle with Number */}
+                  <div 
+                    className={`w-12 h-12 rounded-full border-2 flex items-center justify-center text-lg font-bold relative z-10
+                      ${index + 1 <= step ? 'bg-white text-[#274C77] border-white' : 'border-white/50 text-white/50'}`}
+                  >
+                    {index + 1}
+                  </div>
+                  
+                  {/* Step Text */}
+                  <div className="mt-4 text-center w-24">
+                    <p className={`text-sm font-medium
+                      ${index + 1 <= step ? 'text-white' : 'text-white/50'}`}>
+                      {s}
+                    </p>
+                  </div>
+                  
+                  {/* Progress Line */}
+                  {index < steps.length - 1 && (
+                    <div 
+                      className={`absolute left-[50px] right-[-50px] top-6 h-0.5 -z-10 transition-colors duration-300
+                        ${index + 1 < step ? 'bg-white' : 'bg-white/30'}`}
+                    ></div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop View: Boxes */}
+          <div className="hidden md:block w-full space-y-4 mb-6">
             {steps.map((s, index) => (
               <div 
                 key={index} 
-                className={`p-3 md:p-4 border border-white rounded-lg text-sm md:text-base ${
+                className={`p-4 border border-white rounded-lg text-base ${
                   step === index + 1 ? "bg-white text-[#6096BA] font-bold" : "text-gray-300"
                 }`}
               >
@@ -103,7 +145,8 @@ const Signup = () => {
               </div>
             ))}
           </div>
-          <p className="text-sm md:text-lg">
+          
+          <p className="text-sm md:text-lg mt-8 md:mt-0">
             Already a user?{" "}
             <Link 
               to="/login" 

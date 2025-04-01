@@ -1,14 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import RichTextEditor from './RichTextEditor';
 import { FiSend } from "react-icons/fi";
-import { ReviewContext } from './WeeklyReviewList';
 
-function WeeklyReportForm() {
+function WeeklyReportForm({ addReview }) { // Added prop
   const navigate = useNavigate();
-  const { addReview } = useContext(ReviewContext);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     weekRange: format(new Date(), 'yyyy-MM-dd'),
@@ -55,14 +53,14 @@ function WeeklyReportForm() {
         stamp: format(new Date(), "yyyy-MM-dd HH:mm:ss")
       };
 
-      // Add the review to the context
+      // Add the review using the prop function
       addReview(reviewData);
 
-      navigate('/success', { 
-        state: { 
+      navigate('/weeklyreview/success', {
+        state: {
           data: formData,
           reviewData: reviewData
-        } 
+        }
       });
     } catch (error) {
       toast.error('Something went wrong. Please try again.');
@@ -81,12 +79,13 @@ function WeeklyReportForm() {
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto form-container">
-        <div className="card rounded-2xl p-8 sm:p-12">
-        <h1 className="text-4xl font-bold text-center mb-8 text-[#6096BA]">
-          Weekly Report
-        </h1>
 
+      <div className="max-w-4xl mx-auto form-container ">
+
+        <div className="card rounded-2xl p-8 sm:p-12">
+          <h1 className="text-4xl font-bold text-center mb-8 text-[#6096BA]">
+            Weekly Report
+          </h1>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -136,19 +135,20 @@ function WeeklyReportForm() {
             ))}
 
             <div className="flex justify-end pt-6">
-          <button
-            type="submit"
-            className="px-5 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 bg-[#6096BA] hover:bg-[#4E7A9A] transform hover:-translate-y-0.5 transition-all duration-200"
-          >
-            Submit Report
-            <FiSend className="h-5 w-5" />
-          </button>
+              <button
+                type="submit"
+                className="px-5 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 bg-[#6096BA] hover:bg-[#4E7A9A] transform hover:-translate-y-0.5 transition-all duration-200"
+              >
+                Submit Report
+                <FiSend className="h-5 w-5" />
+              </button>
             </div>
           </form>
         </div>
+
       </div>
+
     </div>
   );
 }
-
 export default WeeklyReportForm;

@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";  // ✅ Import toast
 
 function SuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const formData = location.state?.data;
-  //const reviewData = location.state?.reviewData;
+  const reviewData = location.state?.reviewData;
 
   useEffect(() => {
     if (!formData) {
-      navigate('/');
+      toast.error("No data found. Redirecting...");
+      setTimeout(() => navigate('/'), 2000);
     }
   }, [formData, navigate]);
 
@@ -40,7 +42,7 @@ function SuccessPage() {
           </div>
           
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/weeklyreview')}
             className="submit-button px-8 py-3 rounded-lg text-white font-medium"
           >
             Go Back

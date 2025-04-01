@@ -1,162 +1,162 @@
 [
   {
     "id": "TSK-7480",
-    "date": "2024/03/07",
+    "date": "07/03/2024",
     "name": "Dashboard Update",
     "status": "Completed",
-    "deadline": "2024/03/25",
+    "deadline": "25/03/2024",
     "assignedBy": "Manager"
   },
   {
     "id": "TSK-7481",
-    "date": "2024/03/08",
+    "date": "08/03/2024",
     "name": "User Authentication",
     "status": "Ongoing",
-    "deadline": "2024/03/30",
+    "deadline": "30/03/2025",
     "assignedBy": "Lead Dev"
   },
   {
     "id": "TSK-7482",
-    "date": "2024/03/09",
+    "date": "09/03/2024",
     "name": "Payment Integration",
     "status": "Completed",
-    "deadline": "2024/04/05",
+    "deadline": "05/04/2024",
     "assignedBy": "Manager"
   },
   {
     "id": "TSK-7483",
-    "date": "2024/03/10",
+    "date": "10/03/2024",
     "name": "API Documentation",
     "status": "Completed",
-    "deadline": "2024/03/22",
+    "deadline": "22/03/2024",
     "assignedBy": "Self"
   },
   {
     "id": "TSK-7484",
-    "date": "2024/03/11",
+    "date": "11/03/2024",
     "name": "Bug Fixing",
     "status": "Ongoing",
-    "deadline": "2024/03/28",
+    "deadline": "25/03/2025",
     "assignedBy": "QA Team"
   },
   {
     "id": "TSK-7485",
-    "date": "2024/03/12",
+    "date": "12/03/2024",
     "name": "Frontend Optimization",
     "status": "Ongoing",
-    "deadline": "2024/03/27",
+    "deadline": "27/03/2025",
     "assignedBy": "Lead Dev"
   },
   {
     "id": "TSK-7486",
-    "date": "2024/03/13",
+    "date": "13/03/2024",
     "name": "Database Backup",
     "status": "Completed",
-    "deadline": "2024/03/20",
+    "deadline": "20/03/2024",
     "assignedBy": "Admin"
   },
   {
     "id": "TSK-7487",
-    "date": "2024/03/14",
+    "date": "14/03/2024",
     "name": "UI/UX Review",
     "status": "Completed",
-    "deadline": "2024/04/02",
+    "deadline": "02/04/2024",
     "assignedBy": "Design Team"
   },
   {
     "id": "TSK-7488",
-    "date": "2024/03/15",
+    "date": "15/03/2024",
     "name": "SEO Optimization",
     "status": "Ongoing",
-    "deadline": "2024/04/01",
+    "deadline": "26/03/2025",
     "assignedBy": "Marketing"
   },
   {
     "id": "TSK-7489",
-    "date": "2024/03/16",
+    "date": "16/03/2024",
     "name": "Server Maintenance",
     "status": "Completed",
-    "deadline": "2024/03/19",
+    "deadline": "19/03/2024",
     "assignedBy": "IT Admin"
   },
   {
     "id": "TSK-7490",
-    "date": "2024/03/17",
+    "date": "17/03/2024",
     "name": "Mobile Responsiveness",
     "status": "Ongoing",
-    "deadline": "2024/03/30",
+    "deadline": "30/03/2024",
     "assignedBy": "Lead Dev"
   },
   {
     "id": "TSK-7491",
-    "date": "2024/03/18",
+    "date": "18/03/2024",
     "name": "Security Audit",
     "status": "Completed",
-    "deadline": "2024/04/07",
+    "deadline": "07/04/2024",
     "assignedBy": "CS Team"
   },
   {
     "id": "TSK-7492",
-    "date": "2024/03/19",
+    "date": "19/03/2024",
     "name": "Data Migration",
     "status": "Completed",
-    "deadline": "2024/03/25",
+    "deadline": "25/03/2024",
     "assignedBy": "DB Admin"
   },
   {
     "id": "TSK-7493",
-    "date": "2024/03/20",
+    "date": "20/03/2024",
     "name": "Performance Testing",
     "status": "Ongoing",
-    "deadline": "2024/04/03",
+    "deadline": "26/03/2025",
     "assignedBy": "QA Team"
   },
   {
     "id": "TSK-7494",
-    "date": "2024/03/21",
-    "name": "Customer Feedback Analysis",
+    "date": "21/03/2024",
+    "name": "Feedback Analysis",
     "status": "Completed",
-    "deadline": "2024/04/10",
+    "deadline": "10/04/2024",
     "assignedBy": "Support Team"
   },
   {
     "id": "TSK-7495",
-    "date": "2024/03/22",
+    "date": "22/03/2024",
     "name": "Version Deployment",
     "status": "Completed",
-    "deadline": "2024/03/24",
+    "deadline": "24/03/2024",
     "assignedBy": "DevOps"
   },
   {
     "id": "TSK-7496",
-    "date": "2024/03/23",
+    "date": "23/03/2024",
     "name": "Feature Enhancement",
     "status": "Ongoing",
-    "deadline": "2024/04/06",
+    "deadline": "06/04/2024",
     "assignedBy": "Product Manager"
   },
   {
     "id": "TSK-7497",
-    "date": "2024/03/24",
+    "date": "24/03/2024",
     "name": "Internal Training",
     "status": "Completed",
-    "deadline": "2024/03/29",
+    "deadline": "29/03/2024",
     "assignedBy": "HR"
   },
   {
     "id": "TSK-7498",
-    "date": "2024/03/25",
+    "date": "25/03/2024",
     "name": "Content Update",
     "status": "Ongoing",
-    "deadline": "2024/04/04",
+    "deadline": "04/04/2024",
     "assignedBy": "Content Team"
   },
   {
     "id": "TSK-7499",
-    "date": "2024/03/26",
+    "date": "26/03/2024",
     "name": "Backup Testing",
     "status": "Completed",
-    "deadline": "2024/03/31",
+    "deadline": "31/03/2024",
     "assignedBy": "Admin"
   }
 ]

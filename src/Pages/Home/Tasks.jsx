@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FaEdit,
   FaTrash,
@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import tasksData from "./tasksData.json";
+import { FaTasks, FaCalendarAlt, FaHourglassHalf, FaChevronDown } from "react-icons/fa";
 
 const TaskComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +17,13 @@ const TaskComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const tasksPerPage = 5;
+  const [isOpen, setIsOpen] = useState(false);
+  const searchRef = useRef(null);
+
+  const today = new Date().toLocaleDateString("en-GB");
+  const todayDeadlines = tasksData.filter(
+    (task) => task.deadline === today
+  ).length;
 
   const handleSearch = (e) => {
     if (e.key === "Enter" && searchTerm.trim() !== "") {
@@ -54,48 +62,81 @@ const TaskComponent = () => {
     currentPage * tasksPerPage
   );
 
+  const options = [
+    { label: "All Tasks", value: "all", color: "bg-[#2f9ce4]", hover: "hover:bg-[#2f9ce4]" },
+    { label: "Ongoing Tasks", value: "ongoing", color: "bg-[#CFC800]", hover: "hover:bg-[#CFC800]" },
+    { label: "Completed Tasks", value: "completed", color: "bg-[#56C16B]", hover: "hover:bg-[#56C16B]" },
+  ];
+
+  const handleSelect = (option) => {
+    setFilter(option);
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const handleShortcut = (e) => {
+      if (e.ctrlKey && e.key === "/") {
+        e.preventDefault(); // Prevent default browser behavior
+        searchRef.current?.focus(); // Focus on search input
+      }
+    };
+
+    document.addEventListener("keydown", handleShortcut);
+    return () => document.removeEventListener("keydown", handleShortcut);
+  }, []);
+
   return (
     <div className="p-4 flex flex-col md:flex-row gap-6 w-full">
       <div className="bg-white shadow-lg rounded-lg p-4 w-full md:w-2/3 overflow-x-auto">
         <h2 className="text-lg font-semibold mb-4">Tasks Allotted to Me</h2>
-        <div className="flex flex-col md:flex-row justify-between gap-4 mb-4">
-          <button className="bg-[#2f9ce4] text-white px-4 py-2 rounded w-full md:w-auto cursor-pointer">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
+          {/* Add Task Button */}
+          <button className="bg-[#2f9ce4] text-white px-4 py-2 rounded w-full md:w-auto cursor-pointer shadow-md hover:bg-[#1c85c4] transition-all">
             Add Task
           </button>
-          <input
-            type="text"
-            placeholder="Search Tasks..."
-            className="border px-2 py-1 rounded w-full md:w-auto"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleSearch}
-          />
-        </div>
-        <div className="flex gap-4 mb-4 overflow-x-auto">
-          <button
-            onClick={() => setFilter("all")}
-            className={`px-3 py-1 rounded cursor-pointer ${
-              filter === "all" ? "bg-[#2f9ce4] text-white" : "bg-gray-300"
-            }`}
-          >
-            All Tasks
-          </button>
-          <button
-            onClick={() => setFilter("ongoing")}
-            className={`px-3 py-1 rounded cursor-pointer ${
-              filter === "ongoing" ? "bg-[#B4AF26] text-white" : "bg-gray-300"
-            }`}
-          >
-            Ongoing Tasks
-          </button>
-          <button
-            onClick={() => setFilter("completed")}
-            className={`px-3 py-1 rounded cursor-pointer ${
-              filter === "completed" ? "bg-[#56C16B] text-white" : "bg-gray-300"
-            }`}
-          >
-            Completed Tasks
-          </button>
+
+          {/* Search Input & Dropdown Container */}
+          <div className="flex w-full md:w-auto items-center gap-4 relative">
+            {/* Search Input */}
+            <input
+              type="text"
+              ref={searchRef}
+              placeholder="Search Tasks (ctrl + /)"
+              className="border px-4 py-2 rounded w-full md:w-64 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#2f9ce4] transition-all"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearch}
+            />
+
+            {/* Dropdown Button */}
+            <div className="relative">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all w-36 justify-between hover:cursor-pointer"
+              >
+                <span className="text-sm font-medium">
+                  {options.find((opt) => opt.value === filter)?.label || "Select Task"}
+                </span>
+                <FaChevronDown className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isOpen && (
+                <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-xl overflow-hidden z-10">
+                  {options.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleSelect(option.value)}
+                      className={`flex items-center w-full px-4 py-3 text-left text-gray-700 cursor-pointer transition-all ${filter === option.value ? `${option.color} text-white` : "hover:text-white"
+                        } ${option.hover}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-200 text-sm md:text-base">
@@ -122,19 +163,39 @@ const TaskComponent = () => {
                     <td className="px-4 py-2 cursor-pointer">{task.name}</td>
                     <td className="px-4 py-2">
                       <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          task.status === "Ongoing"
-                            ? "bg-yellow-100 text-yellow-800 border border-yellow-400"
-                            : "bg-green-100 text-green-800 border border-green-400"
-                        }`}
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${task.status === "Ongoing"
+                          ? "bg-yellow-100 text-yellow-800 border border-yellow-400"
+                          : "bg-green-100 text-green-800 border border-green-400"
+                          }`}
                       >
                         {task.status}
                       </span>
                     </td>
-                    <td className="px-4 py-2 flex gap-2">
-                      <FaEye className="text-green-500 cursor-pointer text-lg" />
-                      <FaEdit className="text-blue-500 cursor-pointer text-lg" />
-                      <FaTrash className="text-red-500 cursor-pointer text-lg" />
+
+                    <td className="px-4 py-2 flex gap-4 relative">
+                      <div className="relative group flex items-center">
+                        <FaEye className="text-[#2a8252] cursor-pointer text-lg" />
+                        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg z-10">
+                          View
+                          <div className="absolute left-1/2 transform -translate-x-1/2 top-full border-4 border-transparent border-t-gray-900"></div>
+                        </div>
+                      </div>
+
+                      <div className="relative group flex items-center">
+                        <FaEdit className="text-[#6096ba] cursor-pointer text-lg" />
+                        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg z-10">
+                          Edit
+                          <div className="absolute left-1/2 transform -translate-x-1/2 top-full border-4 border-transparent border-t-gray-900"></div>
+                        </div>
+                      </div>
+
+                      <div className="relative group flex items-center">
+                        <FaTrash className="text-[#EA6C6C] cursor-pointer text-lg" />
+                        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg z-10">
+                          Delete
+                          <div className="absolute left-1/2 transform -translate-x-1/2 top-full border-4 border-transparent border-t-gray-900"></div>
+                        </div>
+                      </div>
                     </td>
                     <td className="px-4 py-2">{task.deadline}</td>
                     <td className="px-4 py-2">{task.assignedBy}</td>
@@ -154,11 +215,11 @@ const TaskComponent = () => {
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="bg-[#2f9ce4] text-white px-4 py-2 rounded-full flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="bg-[#d1d5dc] text-black px-4 py-2 rounded-full flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             <FaChevronLeft /> Prev
           </button>
-          <span className="font-semibold text-lg">
+          <span className="font-semibold text-lg text-[#676767]">
             Page {currentPage} of {totalPages}
           </span>
           <button
@@ -166,7 +227,7 @@ const TaskComponent = () => {
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
             disabled={currentPage === totalPages}
-            className="bg-[#2f9ce4] text-white px-4 py-2 rounded-full flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="bg-[#d1d5dc] text-black px-4 py-2 rounded-full flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             Next <FaChevronRight />
           </button>
@@ -175,9 +236,24 @@ const TaskComponent = () => {
       {/* Summary Cards */}
       <div className="flex flex-col gap-4 w-full md:w-1/3">
         {[
-          { title: "Total Tasks", count: filteredTasks.length, icon: "📊" },
-          { title: "Task Deadlines", count: "Today", icon: "📅" },
-          { title: "Next Day Tasks", count: 1, icon: "⏭" },
+          {
+            title: "Total Tasks",
+            count: filteredTasks.length,
+            icon: <FaTasks size={30} />,
+          },
+          {
+            title: "Task Deadlines",
+            count:
+              todayDeadlines > 0 ? todayDeadlines : "Not any task deadline",
+            icon: <FaCalendarAlt size={30} />,
+          },
+          {
+            title: "Next Day Tasks",
+            count: tasksData.filter(
+              (task) => task.status.toLowerCase() === "ongoing"
+            ).length,
+            icon: <FaHourglassHalf size={30} />,
+          },
         ].map((item, index) => (
           <div
             key={index}
@@ -185,7 +261,7 @@ const TaskComponent = () => {
           >
             <span className="text-3xl">{item.icon}</span>
             <p className="text-lg mt-2">{item.title}</p>
-            <p className="text-xl font-bold">{item.count}</p>
+            <p className="text-lg font-bold">{item.count}</p>
           </div>
         ))}
       </div>
