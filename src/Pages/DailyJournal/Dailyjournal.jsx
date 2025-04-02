@@ -1,76 +1,164 @@
-import React, { useState } from "react";
+import { useState, useEffect, createContext, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+// import StatusBadge from './StatusBadge';
 
-const DailyJournal = () => {
-  const [showMessage, setShowMessage] = useState(false);
+export const ReviewContext = createContext();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setShowMessage(true);
+const INITIAL_DATA = [
+  { id: '100001', week: '2025-02-27 to 2025-03-05', status: 'REJECTED', remarks: 'Focus on metrics and KPIs', stamp: '2025-03-06 18:39:31' },
+  { id: '100002', week: '2025-02-20 to 2025-02-26', status: 'APPROVED', remarks: 'Great progress on project milestones', stamp: '2025-02-27 22:43:40' },
+  { id: '100003', week: '2025-02-13 to 2025-02-19', status: 'PENDING', remarks: 'Under review by team lead', stamp: '2025-02-20 11:29:38' },
+];
 
-    setTimeout(() => {
-      setShowMessage(false);
-    }, 5000);
+export function ReviewProvider({ children }) {
+  const [reviews, setReviews] = useState(INITIAL_DATA);
+
+  const addReview = (newReview) => {
+    setReviews(prev => [newReview, ...prev]);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-200 to-gray-100 p-4">
-      <div className="bg-white bg-opacity-90 p-6 rounded-lg shadow-xl w-full max-w-md relative">
-        <h1 className="text-center text-xl font-bold text-black mb-4">Upload Journal</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block font-semibold text-gray-700">Date of Journal:</label>
-            <input type="date" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" defaultValue="2025-04-08" />
-          </div>
+    <ReviewContext.Provider value={{ reviews, addReview }}>
+      {children}
+    </ReviewContext.Provider>
+  );
+}
 
-          <div>
-            <label className="block font-semibold text-gray-700">Task Topic:</label>
-            <input type="text" placeholder="Enter task topic" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
-          </div>
+function Dailyjournal() {
+  const navigate = useNavigate();
+  const { reviews } = useContext(ReviewContext);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredData, setFilteredData] = useState(reviews);
+  const [filterStatus, setFilterStatus] = useState("All");
 
-          <div>
-            <label className="block font-semibold text-gray-700">Task Done Today:</label>
-            <textarea placeholder="Describe the task done today" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 h-24"></textarea>
-          </div>
+  useEffect(() => {
+    setFilteredData(reviews);
+  }, [reviews]);
 
-          <div>
-            <label className="block font-semibold text-gray-700">Learnings:</label>
-            <textarea placeholder="Your learnings from this task" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 h-24"></textarea>
-          </div>
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-          <div>
-            <label className="block font-semibold text-gray-700">Task Status:</label>
-            <select className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400">
-              <option value="ongoing">Ongoing</option>
-              <option value="completed">Completed</option>
-              <option value="pending">Pending</option>
-            </select>
-          </div>
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const paginatedData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-          <div>
-            <label className="block font-semibold text-gray-700">Task Time (in minutes):</label>
-            <input type="number" placeholder="Enter time taken in minutes" className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400" />
-          </div>
+  const handleNextPage = () => {
+    if (indexOfLastItem < filteredData.length) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
 
-          <div className="flex justify-center">
-            <button type="submit" className="bg-gray-700 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-800 transition-transform transform hover:scale-105">Submit</button>
-          </div>
-        </form>
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
 
-        {showMessage && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white text-black p-6 rounded-lg shadow-2xl text-center border border-gray-300 animate-fade-in w-full max-w-sm">
-            <h2 className="text-xl font-bold text-gray-800">🎉 Submission Successful!</h2>
-            <p className="text-gray-600 mt-2">Your journal entry has been submitted successfully.</p>
-            <div className="mt-4 flex justify-center">
-              <span className="text-green-500 text-3xl">✔️</span>
-            </div>
+  const handleSearch = (event) => {
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    const filtered = reviews.filter(review =>
+      (filterStatus === "All" || review.status.toLowerCase() === filterStatus.toLowerCase()) &&
+      (
+        review.id.toLowerCase().includes(term) ||
+        review.week.toLowerCase().includes(term) ||
+        review.remarks.toLowerCase().includes(term)
+      )
+    );
+
+    setFilteredData(filtered);
+    setCurrentPage(1); // Reset pagination when searching
+  };
+
+  const handleFilterChange = (status) => {
+    setFilterStatus(status);
+
+    const filtered = reviews.filter(review =>
+      status === "All" || review.status.toLowerCase() === status.toLowerCase()
+    );
+
+    setFilteredData(filtered);
+    setCurrentPage(1); // Reset pagination when filtering
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto">
+      <div className="sm:flex sm:items-center sm:justify-between mb-8">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6096BA] to-[#4E7A9A] bg-clip-text text-transparent">
+          Weekly Reviews
+        </h1>
+        <button
+          onClick={() => navigate('/upload')}
+          className="mt-4 sm:mt-0 w-full sm:w-auto px-6 py-3 bg-[#6096BA] text-white rounded-lg hover:bg-[#4E7A9A]"
+        >
+          Upload Weekly Review
+        </button>
+      </div>
+
+      <div className="bg-[#f7f8fa] px-10 py-6">
+        <div className="mb-2 flex items-center justify-end space-x-2">
+          <label className="text-gray-700 text-sm font-semibold">Search:</label>
+          <div className="relative w-60 sm:w-48">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-gray-700 text-sm"
+            />
+            <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
           </div>
         </div>
-        
-        )}
+
+        <div className="flex justify-end">
+          {["Approved", "Pending", "Rejected", "All"].map(status => (
+            <button
+              key={status}
+              onClick={() => handleFilterChange(status)}
+              className={`border px-2 py-2 mx-1 my-2 rounded-lg text-white font-semibold transition-all ${
+                filterStatus === status ? "bg-[#4E7A9A]" : "bg-[#6096BA] hover:bg-[#4E7A9A]"
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+
+        <div className="bg-white shadow-lg overflow-hidden border border-indigo-50">
+          <table className="min-w-full divide-y divide-indigo-100">
+            <thead className="bg-[#e9ecef]">
+              <tr>
+                {["ID", "Week", "Status", "Remarks", "Stamp", "Actions"].map(header => (
+                  <th key={header} className="px-6 py-4 text-left text-sm font-bold text-black">
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedData.map((review) => (
+                <tr key={review.id} className="hover:bg-indigo-50 transition-colors">
+                  <td className="px-6 py-4">#{review.id}</td>
+                  <td className="px-6 py-4">{review.week}</td>
+                  <td className="px-6 py-4"><StatusBadge status={review.status} /></td>
+                  <td className="px-6 py-4">{review.remarks}</td>
+                  <td className="px-6 py-4">{review.stamp}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex justify-end space-x-2 mt-4">
+          <button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</button>
+          <span>{currentPage}</span>
+          <button onClick={handleNextPage} disabled={indexOfLastItem >= filteredData.length}>Next</button>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default DailyJournal;
+export default Dailyjournal;

@@ -90,14 +90,44 @@ const TaskComponent = () => {
       <div className="bg-white shadow-lg rounded-lg p-4 w-full md:w-2/3 overflow-x-auto">
         <h2 className="text-lg font-semibold mb-4">Tasks Allotted to Me</h2>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-          {/* Add Task Button */}
-          <button className="bg-[#2f9ce4] text-white px-4 py-2 rounded w-full md:w-auto cursor-pointer shadow-md hover:bg-[#1c85c4] transition-all">
-            Add Task
-          </button>
+          {/* Top Row: Add Task & Dropdown (Side by Side in Desktop, Row in Mobile) */}
+          <div className="flex w-full md:w-auto justify-between items-center gap-4">
+            {/* Add Task Button */}
+            <button className="bg-[#2f9ce4] text-white px-4 py-2 rounded w-full md:w-auto cursor-pointer shadow-md hover:bg-[#1c85c4] transition-all whitespace-nowrap">
+              Add Task
+            </button>
 
-          {/* Search Input & Dropdown Container */}
-          <div className="flex w-full md:w-auto items-center gap-4 relative">
-            {/* Search Input */}
+            {/* Dropdown Button */}
+            <div className="relative w-full md:w-auto">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all w-full md:w-36 justify-between hover:cursor-pointer"
+              >
+                <span className="text-sm font-medium whitespace-nowrap">
+                  {options.find((opt) => opt.value === filter)?.label || "Select Task"}
+                </span>
+                <FaChevronDown className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isOpen && (
+                <div className="absolute right-0 mt-2 w-full md:w-36 bg-white border border-gray-300 rounded-lg shadow-xl overflow-hidden z-10">
+                  {options.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleSelect(option.value)}
+                      className={`flex items-center w-full px-4 py-3 text-left text-gray-700 cursor-pointer transition-all ${filter === option.value ? `${option.color} text-white` : "hover:text-white"} ${option.hover}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Search Input (Always Below in Mobile, Inline in Desktop) */}
+          <div className="w-full">
             <input
               type="text"
               ref={searchRef}
@@ -107,37 +137,9 @@ const TaskComponent = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleSearch}
             />
-
-            {/* Dropdown Button */}
-            <div className="relative">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all w-36 justify-between hover:cursor-pointer"
-              >
-                <span className="text-sm font-medium">
-                  {options.find((opt) => opt.value === filter)?.label || "Select Task"}
-                </span>
-                <FaChevronDown className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              {/* Dropdown Menu */}
-              {isOpen && (
-                <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-xl overflow-hidden z-10">
-                  {options.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => handleSelect(option.value)}
-                      className={`flex items-center w-full px-4 py-3 text-left text-gray-700 cursor-pointer transition-all ${filter === option.value ? `${option.color} text-white` : "hover:text-white"
-                        } ${option.hover}`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
         </div>
+
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-200 text-sm md:text-base">
             <thead>
@@ -211,6 +213,8 @@ const TaskComponent = () => {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination */}
         <div className="flex justify-center items-center mt-4 gap-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
