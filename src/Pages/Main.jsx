@@ -15,7 +15,6 @@ import WeeklyReportForm from "./WeeklyReview/WeeklyReportForm";
 import SuccessPage from "./WeeklyReview/SuccessPage";
 import { Toaster } from "react-hot-toast";
 
-
 const Main = () => {
 
 //add the records of weekly review

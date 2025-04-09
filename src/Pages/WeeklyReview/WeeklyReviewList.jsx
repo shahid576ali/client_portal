@@ -90,27 +90,77 @@ function WeeklyReviewList({ reviews, addReview }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6">
       <div className="sm:flex sm:items-center sm:justify-between mt-8 mb-3">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-[#6096BA] to-[#4E7A9A] bg-clip-text text-transparent">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#6096BA] to-[#4E7A9A] bg-clip-text text-transparent">
           Weekly Reviews
         </h1>
 
         <button
           onClick={() => navigate('/weeklyreview/upload')}
-          className="mt-4 sm:mt-0 w-full sm:w-auto px-6 py-3 bg-[#6096BA] text-white rounded-lg hover:bg-[#4E7A9A] focus:outline-none focus:ring-2 focus:ring-[#4E7A9A] focus:ring-offset-2 transition-all duration-200 font-semibold shadow-lg transform hover:-translate-y-0.5"
+          className="mt-4 sm:mt-0 w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 bg-[#6096BA] text-white rounded-lg hover:bg-[#4E7A9A] focus:outline-none focus:ring-2 focus:ring-[#4E7A9A] focus:ring-offset-2 transition-all duration-200 font-semibold shadow-lg transform hover:-translate-y-0.5"
         >
           Upload Weekly Review
         </button>
       </div>
 
       {/* form container */}
-      <div className="bg-[#f7f8fa] px-10 py-6 ">
+      <div className="bg-[#f7f8fa] px-4 sm:px-10 py-6 rounded-lg">
+
+        
+
+       
+        {/* Filter buttons */}
+          <div className="flex flex-wrap justify-end gap-1 sm:gap-0 sm:space-x-1">
+            <button
+              onClick={() => handleFilterChange("Approved")}
+              className={`border px-3 py-2 sm:px-2 sm:py-1 md:py-2 mx-0 sm:mx-1 my-1 sm:my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 text-sm sm:text-xs md:text-base ${
+                filterStatus === "Approved" ? "bg-[#1d7cb9]" : "bg-[#2f9ce4] hover:bg-[#1d7cb9]"
+              }`}
+            >
+              Approved
+            </button>
+            <button
+              onClick={() => handleFilterChange("Pending")}
+              className={`border px-3 py-2 sm:px-2 sm:py-1 md:py-2 mx-0 sm:mx-1 my-1 sm:my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 text-sm sm:text-xs md:text-base ${
+                filterStatus === "Pending" ? "bg-[#1d7cb9]" : "bg-[#2f9ce4] hover:bg-[#1d7cb9]"
+              }`}
+            >
+              Pending
+            </button>
+            <button
+              onClick={() => handleFilterChange("Rejected")}
+              className={`border px-3 py-2 sm:px-2 sm:py-1 md:py-2 mx-0 sm:mx-1 my-1 sm:my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 text-sm sm:text-xs md:text-base ${
+                filterStatus === "Rejected" ? "bg-[#1d7cb9]" : "bg-[#2f9ce4] hover:bg-[#1d7cb9]"
+              }`}
+            >
+              Rejected
+            </button>
+            <button
+              onClick={() => handleFilterChange("All")}
+              className={`border px-4 py-2 sm:px-3 sm:py-1 md:py-2 mx-0 sm:mx-1 my-1 sm:my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 text-sm sm:text-xs md:text-base ${
+                filterStatus === "All" ? "bg-[#1d7cb9]" : "bg-[#2f9ce4] hover:bg-[#1d7cb9]"
+              }`}
+            >
+              Reset
+            </button>
+            <select 
+              className="border px-3 py-2 sm:px-2 sm:py-1 md:py-2 mx-0 sm:mx-1 my-1 sm:my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 bg-[#2f9ce4] hover:bg-[#1d7cb9] focus:outline-none cursor-pointer text-sm sm:text-xs md:text-base"
+              onChange={(e) => handleSortChange(e.target.value)}
+            >
+              <option className="bg-[#2f9ce4] cursor-pointer" value="">Sort by</option>
+              <option className="bg-[#2f9ce4] cursor-pointer" value="ID">ID</option>
+              <option className="bg-[#2f9ce4] cursor-pointer" value="Week">Week</option>
+              <option className="bg-[#2f9ce4] cursor-pointer" value="Stamp">Stamp</option>
+              <option className="bg-[#2f9ce4] cursor-pointer" value="Status">Status</option>
+            </select>
+          </div>
+
 
         {/* Search bar */}
-        <div className="mb-2 flex items-center justify-end space-x-2">
+        <div className="mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
           <label className="text-gray-700 text-sm font-semibold">Search:</label>
-          <div className="relative w-60 sm:w-48">
+          <div className="relative w-full sm:w-48">
             <input
               type="text"
               placeholder="Search..."
@@ -122,97 +172,54 @@ function WeeklyReviewList({ reviews, addReview }) {
           </div>
         </div>
 
-        {/* Filter buttons */}
-        <div className="flex justify-end">
-          <button
-            onClick={() => handleFilterChange("Approved")}
-            className={`border px-2 py-2 mx-1 my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
-              filterStatus === "Approved" ? "bg-[#4E7A9A]" : "bg-[#6096BA] hover:bg-[#4E7A9A]"
-            }`}
-          >
-            Approved
-          </button>
-          <button
-            onClick={() => handleFilterChange("Pending")}
-            className={`border px-2 py-2 mx-1 my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
-              filterStatus === "Pending" ? "bg-[#4E7A9A]" : "bg-[#6096BA] hover:bg-[#4E7A9A]"
-            }`}
-          >
-            Pending
-          </button>
-          <button
-            onClick={() => handleFilterChange("Rejected")}
-            className={`border px-2 py-2 mx-1 my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
-              filterStatus === "Rejected" ? "bg-[#4E7A9A]" : "bg-[#6096BA] hover:bg-[#4E7A9A]"
-            }`}
-          >
-            Rejected
-          </button>
-          <button
-            onClick={() => handleFilterChange("All")}
-            className={`border px-5 py-2 mx-1 my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
-              filterStatus === "All" ? "bg-[#4E7A9A]" : "bg-[#6096BA] hover:bg-[#4E7A9A]"
-            }`}
-          >
-            Reset
-          </button>
-          <select 
-            className="border px-3 py-2 mx-1 my-2 rounded-lg text-white font-semibold shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 bg-[#6096BA] hover:bg-[#3d6a8b] focus:outline-none cursor-pointer"
-            onChange={(e) => handleSortChange(e.target.value)}
-          >
-            <option className="bg-[#6096BA] cursor-pointer" value="">Sort by</option>
-            <option className="bg-[#6096BA] cursor-pointer" value="ID">ID</option>
-            <option className="bg-[#6096BA] cursor-pointer" value="Week">Week</option>
-            <option className="bg-[#6096BA] cursor-pointer" value="Stamp">Stamp</option>
-            <option className="bg-[#6096BA] cursor-pointer" value="Status">Status</option>
-          </select>
-        </div>
+
+
 
         {/* Table */}
-        <div className="bg-white shadow-lg overflow-hidden border border-indigo-50">
+        <div className="bg-white shadow-lg overflow-hidden border border-indigo-50 mt-2 sm:mt-0">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-indigo-100">
               <thead className="bg-[#e9ecef] from-indigo-600 to-purple-600">
                 <tr>
-                  <th className="px-6 py-4 text-left">
+                  <th className="px-3 sm:px-6 py-3 text-left">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-black tracking-wider">ID</span>
+                      <span className="text-xs sm:text-sm font-bold text-black tracking-wider">ID</span>
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left">
+                  <th className="px-3 sm:px-6 py-3 text-left">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-black tracking-wider">Week</span>
+                      <span className="text-xs sm:text-sm font-bold text-black tracking-wider">Week</span>
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left">
+                  <th className="px-3 sm:px-6 py-3 text-left">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-black tracking-wider">Status</span>
+                      <span className="text-xs sm:text-sm font-bold text-black tracking-wider">Status</span>
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left">
-                    <span className="text-sm font-bold text-black tracking-wider">Remarks</span>
+                  <th className="px-3 sm:px-6 py-3 text-left">
+                    <span className="text-xs sm:text-sm font-bold text-black tracking-wider">Remarks</span>
                   </th>
-                  <th className="px-6 py-4 text-left">
+                  <th className="px-3 sm:px-6 py-3 text-left">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-black tracking-wider">Stamp</span>
+                      <span className="text-xs sm:text-sm font-bold text-black tracking-wider">Stamp</span>
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left">
-                    <span className="text-sm font-bold text-black tracking-wider">Actions</span>
+                  <th className="px-3 sm:px-6 py-3 text-left">
+                    <span className="text-xs sm:text-sm font-bold text-black tracking-wider">Actions</span>
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-[#f7f8fa] divide-y divide-indigo-50">
                 {paginatedData.map((review) => (
                   <tr key={review.id} className="hover:bg-indigo-50/50 transition-colors duration-150">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-900">#{review.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{review.week}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium text-indigo-900">#{review.id}</td>
+                    <td className="px-3 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-600">{review.week}</td>
+                    <td className="px-3 sm:px-6 py-3 whitespace-nowrap">
                       <StatusBadge status={review.status} />
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 max-w-md truncate">{review.remarks}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{review.stamp}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-3 sm:px-6 py-3 text-xs sm:text-sm text-gray-600 max-w-[100px] sm:max-w-md truncate">{review.remarks}</td>
+                    <td className="px-3 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-600">{review.stamp}</td>
+                    <td className="px-3 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm">
                       <button
                         className="text-indigo-600 hover:text-indigo-900 font-medium transition-colors duration-150"
                         onClick={() => console.log('Edit review:', review.id)}
@@ -228,7 +235,7 @@ function WeeklyReviewList({ reviews, addReview }) {
         </div>
 
         {/* Showing entries text */}
-        <div className="text-sm text-[#4E7A9A] font-medium mt-2">
+        <div className="text-xs sm:text-sm text-[#4E7A9A] font-medium mt-2">
           Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredData.length)} of {filteredData.length} entries
         </div>
 
@@ -237,17 +244,17 @@ function WeeklyReviewList({ reviews, addReview }) {
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
-            className="px-4 py-2 border rounded-md bg-white text-black disabled:opacity-50"
+            className="px-3 py-1 sm:px-4 sm:py-2 border rounded-md bg-white text-black disabled:opacity-50 text-xs sm:text-base"
           >
             Previous
           </button>
-          <span className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md">
+          <span className="px-3 py-1 sm:px-4 sm:py-2 bg-blue-600 text-white font-semibold rounded-md text-xs sm:text-base">
             {currentPage}
           </span>
           <button
             onClick={handleNextPage}
             disabled={indexOfLastItem >= filteredData.length}
-            className="px-4 py-2 border rounded-md bg-white text-black disabled:opacity-50"
+            className="px-3 py-1 sm:px-4 sm:py-2 border rounded-md bg-white text-black disabled:opacity-50 text-xs sm:text-base"
           >
             Next
           </button>
